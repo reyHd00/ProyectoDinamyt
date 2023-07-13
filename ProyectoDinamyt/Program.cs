@@ -13,9 +13,9 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<BuscadorDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("MyConnection")));
-builder.Services.AddTransient<IMostrarDatosRepository, MostrarDatosRepository>();
 
-builder.Services.AddTransient<IMostrarDatosRepository, MostrarDatosRepository>();
+builder.Services.AddTransient<IUserValidationRepository, UserValidationRespository>();
+
 
 var app = builder.Build();
 
