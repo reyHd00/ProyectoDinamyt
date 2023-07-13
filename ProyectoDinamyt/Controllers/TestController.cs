@@ -1,19 +1,21 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using ProyectoDinamyt.Models;
+//using ProyectoDinamyt.Models;
 using ProyectoDinamyt.Repository.Imp;
+using ProyectoDinamyt.Repository.Tables;
 
 namespace ProyectoDinamyt.Controllers
 
 {
     [ApiController]
     [Route("[controller]")]
-    
+
     public class TestController : ControllerBase
     {
-        private IMostrarDatosRepository _mostrarDatosRepository;
-        public TestController(IMostrarDatosRepository mostrarDatosRepository)
+        private readonly IUserValidationRepository _userValidationRepository;
+
+        public TestController(IUserValidationRepository userValidationRepository)
         {
-            _mostrarDatosRepository = mostrarDatosRepository;
+            _userValidationRepository = userValidationRepository;
         }
 
         [HttpGet("PrimeraPrueba")]
@@ -21,14 +23,23 @@ namespace ProyectoDinamyt.Controllers
         {
             return Ok("Hola Mundo");
         }
-
-        [HttpGet("{nombre}")]
-        public ActionResult MostrarDatos([FromRoute] string nombre)
+        [HttpGet("ValidarUsuario/{email}/{password}")]
+        public async Task<ActionResult> ValidarUsuario([FromRoute] string email, [FromRoute] string password)
         {
-            CantidadModels cantidad = _mostrarDatosRepository.GetCantidadModels(nombre);
-            return Ok(cantidad);
+            // Realiza la validación de usuario utilizando el repositorio de validación
+            UsersTable user = await _userValidationRepository.Get(email, password);
+
+            if (user != null)
+            {
+                return Ok("Usuario válido");
+            }
+            else
+            {
+                return BadRequest("Usuario no válido");
+            }
         }
 
-        
+
+
     }
 }
