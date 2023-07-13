@@ -11,8 +11,8 @@ namespace ProyectoDinamyt.Repository.Acess
         {
 
         }
-
         public DbSet<UsersTable> Users { get; set; }
+
         
     }
 }
